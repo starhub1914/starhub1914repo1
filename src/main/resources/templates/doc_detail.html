@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Document Detail - SDM Environment</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
+    <style>
+        body { background-color: #0f172a; color: #f8fafc; }
+        .card-custom { background-color: #1e293b; border: 1px solid #334155; }
+        .ai-recommendation-box { background-color: #0284c7; color: #ffffff; padding: 1rem; border-radius: 8px; font-family: monospace; white-space: pre-wrap; }
+    </style>
+</head>
+<body class="p-4">
+<div class="container">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <a href="/dashboard" class="btn btn-outline-light"><i class="bi bi-arrow-left me-1"></i> Back to Dashboard</a>
+        <div>
+            <span class="badge bg-primary fs-6 me-2" th:text="${doc.docId}">P101</span>
+            <span class="badge bg-secondary fs-6" th:text="'App Code: ' + ${doc.appCode}">SDM</span>
+        </div>
+    </div>
+
+    <!-- Main Header Card -->
+    <div class="card card-custom mb-4 p-4">
+        <h2 class="text-info" th:text="${doc.title}">Project Charter</h2>
+        <p class="text-muted" th:text="${doc.description}">Document Description...</p>
+        <div class="row mt-2">
+            <div class="col-md-3"><strong>Phase:</strong> Phase <span th:text="${doc.phaseNumber}">1</span></div>
+            <div class="col-md-3"><strong>Version:</strong> v<span th:text="${doc.versionNum}">1.0.0</span></div>
+            <div class="col-md-3"><strong>Status:</strong> <span class="badge bg-success" th:text="${doc.status}">APPROVED</span></div>
+            <div class="col-md-3"><strong>Code:</strong> <span th:text="${doc.docCode}">DOC-P101</span></div>
+        </div>
+    </div>
+
+    <!-- Maker / Checker Actions -->
+    <div class="row g-4 mb-4">
+        <div class="col-md-6">
+            <div class="card card-custom p-3 h-100">
+                <h5><i class="bi bi-person-workspace text-primary"></i> Maker Submission</h5>
+                <form th:action="@{'/document/' + ${doc.docId} + '/submit'}" method="post">
+                    <div class="mb-2">
+                        <label class="form-label">Maker Comments</label>
+                        <textarea name="comments" class="form-control bg-dark text-light border-secondary" rows="2" placeholder="Submission comments..."></textarea>
+                    </div>
+                    <button type="submit" class="btn btn-primary btn-sm"><i class="bi bi-send me-1"></i> Submit to Checker</button>
+                </form>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="card card-custom p-3 h-100">
+                <h5><i class="bi bi-check-circle-fill text-success"></i> Checker Approval (Hard Gate Signoff)</h5>
+                <form th:action="@{'/document/' + ${doc.docId} + '/approve'}" method="post" class="d-inline">
+                    <div class="mb-2">
+                        <label class="form-label">Checker Comments</label>
+                        <textarea name="comments" class="form-control bg-dark text-light border-secondary" rows="2" placeholder="Approval/rejection comments..."></textarea>
+                    </div>
+                    <button type="submit" class="btn btn-success btn-sm me-2"><i class="bi bi-check-lg me-1"></i> Approve</button>
+                </form>
+                <form th:action="@{'/document/' + ${doc.docId} + '/reject'}" method="post" class="d-inline">
+                    <button type="submit" class="btn btn-danger btn-sm"><i class="bi bi-x-lg me-1"></i> Reject</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- AI Multi-Agent & RAG Section -->
+    <div class="card card-custom p-4 mb-4">
+        <div class="d-flex justify-content-between align-items-center mb-3">
+            <h4 class="text-warning mb-0"><i class="bi bi-cpu"></i> AI Multi-Agent Review & Local RAG Insights</h4>
+            <form th:action="@{'/document/' + ${doc.docId} + '/ai-process'}" method="post">
+                <button type="submit" class="btn btn-warning"><i class="bi bi-play-fill me-1"></i> Trigger Multi-Agent Pipeline</button>
+            </form>
+        </div>
+
+        <div th:if="${doc.aiRecommendation != null}" class="ai-recommendation-box" th:text="${doc.aiRecommendation}">
+            AI Multi-agent processing recommendation will appear here...
+        </div>
+        <div th:if="${doc.aiRecommendation == null}" class="alert alert-secondary mb-0">
+            No AI analysis has been run on this document yet. Click 'Trigger Multi-Agent Pipeline' above.
+        </div>
+    </div>
+</div>
+</body>
+</html>

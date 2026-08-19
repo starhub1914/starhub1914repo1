@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Login - Software Development Document Environment</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
+    <style>
+        body { background: linear-gradient(135deg, #1e293b, #0f172a); color: #f8fafc; min-height: 100vh; display: flex; align-items: center; }
+        .login-card { background: #334155; border-radius: 12px; border: 1px solid #475569; padding: 2rem; box-shadow: 0 10px 25px rgba(0,0,0,0.5); }
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-md-5">
+            <div class="login-card">
+                <h3 class="text-center mb-1 text-primary"><i class="bi bi-file-earmark-code"></i> SDM Environment</h3>
+                <p class="text-center text-muted mb-4">Software Development Document Environment</p>
+
+                <div th:if="${param.error}" class="alert alert-danger py-2">Invalid username or password.</div>
+                <div th:if="${msg}" class="alert alert-info py-2" th:text="${msg}"></div>
+
+                <form th:action="@{/login}" method="post">
+                    <div class="mb-3">
+                        <label class="form-label">Authentication Mode</label>
+                        <select class="form-select bg-dark text-light border-secondary">
+                            <option th:selected="${isLdap}">LDAP / Active Directory</option>
+                            <option th:selected="${!isLdap}">Local Database Auth</option>
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Username</label>
+                        <input type="text" name="username" class="form-control bg-dark text-light border-secondary" required placeholder="admin / maker1 / checker1">
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Password</label>
+                        <div class="input-group">
+                            <input type="password" id="passwordInput" name="password" class="form-control bg-dark text-light border-secondary" required placeholder="password123">
+                            <button class="btn btn-outline-secondary text-light" type="button" id="togglePasswordBtn">
+                                <i class="bi bi-eye" id="eyeIcon"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <button type="submit" class="btn btn-primary w-100 mt-2">Sign In</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    document.getElementById('togglePasswordBtn').addEventListener('click', function() {
+        const input = document.getElementById('passwordInput');
+        const icon = document.getElementById('eyeIcon');
+        if (input.type === 'password') {
+            input.type = 'text';
+            icon.classList.remove('bi-eye');
+            icon.classList.add('bi-eye-slash');
+        } else {
+            input.type = 'password';
+            icon.classList.remove('bi-eye-slash');
+            icon.classList.add('bi-eye');
+        }
+    });
+</script>
+</body>
+</html>

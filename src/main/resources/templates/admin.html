@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Admin Panel - SDM Environment</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
+    <style>
+        body { background-color: #0f172a; color: #f8fafc; }
+        .card-custom { background-color: #1e293b; border: 1px solid #334155; }
+    </style>
+</head>
+<body class="p-4">
+<div class="container">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2><i class="bi bi-gear-fill text-primary me-2"></i> Administration Panel</h2>
+        <a href="/dashboard" class="btn btn-outline-light"><i class="bi bi-arrow-left me-1"></i> Back to Dashboard</a>
+    </div>
+
+    <!-- Toggles Row -->
+    <div class="card card-custom p-4 mb-4">
+        <h4 class="mb-3 text-info">System Configurations & Authentication Toggles</h4>
+        <div class="row g-3">
+            <div class="col-md-4">
+                <div class="form-check form-switch fs-5">
+                    <input class="form-check-input" type="checkbox" id="ldapToggle" th:checked="${isLdap}">
+                    <label class="form-check-label ms-2" for="ldapToggle">LDAP / Active Directory Auth</label>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="form-check form-switch fs-5">
+                    <input class="form-check-input" type="checkbox" id="emailToggle">
+                    <label class="form-check-label ms-2" for="emailToggle">Email Notifications</label>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="form-check form-switch fs-5">
+                    <input class="form-check-input" type="checkbox" id="smsToggle">
+                    <label class="form-check-label ms-2" for="smsToggle">SMS Notifications</label>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Document Template Upload Section (Admin Only) -->
+    <div class="card card-custom p-4 mb-4">
+        <h4 class="mb-3 text-warning"><i class="bi bi-file-earmark-arrow-up"></i> Document Template Management (Admin Only)</h4>
+        <form action="/admin/templates/upload" method="post" enctype="multipart/form-data" class="row g-3">
+            <div class="col-md-5">
+                <label class="form-label">Template File (Excel, Word, PPT)</label>
+                <input type="file" name="file" class="form-control bg-dark text-light border-secondary" required>
+            </div>
+            <div class="col-md-4">
+                <label class="form-label">Template Name</label>
+                <input type="text" name="templateName" class="form-control bg-dark text-light border-secondary" placeholder="e.g. Standard FSD Template" required>
+            </div>
+            <div class="col-md-3 d-flex align-items-end">
+                <button type="submit" class="btn btn-warning w-100"><i class="bi bi-upload me-1"></i> Upload Template</button>
+            </div>
+        </form>
+    </div>
+</div>
+</body>
+</html>

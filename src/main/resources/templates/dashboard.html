@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Dashboard - SDM Environment</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
+    <style>
+        body { background-color: #0f172a; color: #f8fafc; }
+        .sidebar { background-color: #1e293b; min-height: 100vh; padding: 1.5rem 1rem; }
+        .card-stat { background-color: #1e293b; border: 1px solid #334155; border-radius: 10px; }
+        .nav-link { color: #94a3b8; }
+        .nav-link:hover, .nav-link.active { color: #38bdf8; background-color: #334155; border-radius: 6px; }
+    </style>
+</head>
+<body>
+<div class="container-fluid">
+    <div class="row">
+        <!-- Sidebar -->
+        <div class="col-md-2 sidebar">
+            <h5 class="text-primary mb-4"><i class="bi bi-file-earmark-code"></i> SDM Environment</h5>
+            <div class="nav flex-column nav-pills">
+                <a class="nav-link active mb-2" href="/dashboard"><i class="bi bi-speedometer2 me-2"></i> Dashboard</a>
+                <div class="text-uppercase text-muted fs-7 mt-3 mb-2 px-2">SDM Deliverable Phases</div>
+                <a class="nav-link mb-1" href="/phase/1"><i class="bi bi-1-circle me-2"></i> Phase 1: Initiation</a>
+                <a class="nav-link mb-1" href="/phase/2"><i class="bi bi-2-circle me-2"></i> Phase 2: Requirements</a>
+                <a class="nav-link mb-1" href="/phase/3"><i class="bi bi-3-circle me-2"></i> Phase 3: System Design</a>
+                <a class="nav-link mb-1" href="/phase/4"><i class="bi bi-4-circle me-2"></i> Phase 4: Coding & Build</a>
+                <a class="nav-link mb-1" href="/phase/5"><i class="bi bi-5-circle me-2"></i> Phase 5: QA & Testing</a>
+                <a class="nav-link mb-1" href="/phase/6"><i class="bi bi-6-circle me-2"></i> Phase 6: Deployment</a>
+                <a class="nav-link mb-1" href="/phase/7"><i class="bi bi-7-circle me-2"></i> Phase 7: Maintenance</a>
+                <div class="text-uppercase text-muted fs-7 mt-3 mb-2 px-2">Administration</div>
+                <a class="nav-link mb-1" href="/admin"><i class="bi bi-gear me-2"></i> Admin Panel</a>
+                <a class="nav-link text-danger mt-4" href="/logout"><i class="bi bi-box-arrow-right me-2"></i> Logout</a>
+            </div>
+        </div>
+
+        <!-- Main Content -->
+        <div class="col-md-10 p-4">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h2>Software Development Document Environment</h2>
+                <div>
+                    <a href="/api/reports/excel" class="btn btn-outline-success me-2"><i class="bi bi-file-earmark-excel"></i> Export Excel</a>
+                    <a href="/api/reports/pdf" class="btn btn-outline-danger"><i class="bi bi-file-earmark-pdf"></i> Export PDF</a>
+                </div>
+            </div>
+
+            <!-- Stats Row -->
+            <div class="row g-3 mb-4">
+                <div class="col-md-4">
+                    <div class="card-stat p-3">
+                        <div class="text-muted">Total Approved</div>
+                        <h3 class="text-success" th:text="${approvedCount}">0</h3>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="card-stat p-3">
+                        <div class="text-muted">Pending Checker Approval</div>
+                        <h3 class="text-warning" th:text="${pendingCount}">0</h3>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="card-stat p-3">
+                        <div class="text-muted">Draft / Pending Maker</div>
+                        <h3 class="text-info" th:text="${draftCount}">0</h3>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Documents Table -->
+            <div class="card bg-dark border-secondary">
+                <div class="card-header border-secondary d-flex justify-content-between align-items-center">
+                    <h5 class="mb-0">All SDM Deliverable Documents</h5>
+                </div>
+                <div class="card-body p-0">
+                    <table class="table table-dark table-hover mb-0">
+                        <thead>
+                        <tr>
+                            <th>Doc ID</th>
+                            <th>Phase</th>
+                            <th>Title</th>
+                            <th>App Code</th>
+                            <th>Version</th>
+                            <th>Status</th>
+                            <th>Action</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr th:each="doc : ${allDocs}">
+                            <td class="fw-bold" th:text="${doc.docId}">P101</td>
+                            <td th:text="'Phase ' + ${doc.phaseNumber}">Phase 1</td>
+                            <td th:text="${doc.title}">Project Charter</td>
+                            <td><span class="badge bg-secondary" th:text="${doc.appCode}">SDM</span></td>
+                            <td th:text="${doc.versionNum}">1.0.0</td>
+                            <td>
+                                <span th:if="${doc.status == 'APPROVED'}" class="badge bg-success">APPROVED</span>
+                                <span th:if="${doc.status == 'PENDING_APPROVAL'}" class="badge bg-warning text-dark">PENDING APPROVAL</span>
+                                <span th:if="${doc.status == 'PENDING_MAKER'}" class="badge bg-info text-dark">DRAFT / MAKER</span>
+                                <span th:if="${doc.status == 'REJECTED'}" class="badge bg-danger">REJECTED</span>
+                            </td>
+                            <td>
+                                <a th:href="@{'/document/' + ${doc.docId}}" class="btn btn-sm btn-primary">View / Process</a>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

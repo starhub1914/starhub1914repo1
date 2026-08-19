@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Phase Deliverables - SDM Environment</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
+    <style>
+        body { background-color: #0f172a; color: #f8fafc; }
+        .sidebar { background-color: #1e293b; min-height: 100vh; padding: 1.5rem 1rem; }
+        .nav-link { color: #94a3b8; }
+        .nav-link:hover, .nav-link.active { color: #38bdf8; background-color: #334155; border-radius: 6px; }
+        .doc-frame { background-color: #1e293b; border: 1px solid #334155; border-radius: 8px; padding: 1.5rem; margin-bottom: 1.5rem; }
+    </style>
+</head>
+<body>
+<div class="container-fluid">
+    <div class="row">
+        <!-- Sidebar -->
+        <div class="col-md-2 sidebar">
+            <h5 class="text-primary mb-4"><i class="bi bi-file-earmark-code"></i> SDM Environment</h5>
+            <div class="nav flex-column nav-pills">
+                <a class="nav-link mb-2" href="/dashboard"><i class="bi bi-speedometer2 me-2"></i> Dashboard</a>
+                <div class="text-uppercase text-muted fs-7 mt-3 mb-2 px-2">SDM Deliverable Phases</div>
+                <a class="nav-link mb-1" th:classappend="${phaseNum == 1} ? 'active'" href="/phase/1">Phase 1: Initiation</a>
+                <a class="nav-link mb-1" th:classappend="${phaseNum == 2} ? 'active'" href="/phase/2">Phase 2: Requirements</a>
+                <a class="nav-link mb-1" th:classappend="${phaseNum == 3} ? 'active'" href="/phase/3">Phase 3: System Design</a>
+                <a class="nav-link mb-1" th:classappend="${phaseNum == 4} ? 'active'" href="/phase/4">Phase 4: Coding & Build</a>
+                <a class="nav-link mb-1" th:classappend="${phaseNum == 5} ? 'active'" href="/phase/5">Phase 5: QA & Testing</a>
+                <a class="nav-link mb-1" th:classappend="${phaseNum == 6} ? 'active'" href="/phase/6">Phase 6: Deployment</a>
+                <a class="nav-link mb-1" th:classappend="${phaseNum == 7} ? 'active'" href="/phase/7">Phase 7: Maintenance</a>
+                <div class="text-uppercase text-muted fs-7 mt-3 mb-2 px-2">Administration</div>
+                <a class="nav-link mb-1" href="/admin"><i class="bi bi-gear me-2"></i> Admin Panel</a>
+            </div>
+        </div>
+
+        <!-- Main Content -->
+        <div class="col-md-10 p-4">
+            <h2 class="mb-4">Phase <span th:text="${phaseNum}">1</span> Deliverables</h2>
+
+            <div th:each="doc : ${phaseDocs}" class="doc-frame">
+                <div class="d-flex justify-content-between align-items-center mb-2">
+                    <h4 class="text-info mb-0">
+                        <span class="badge bg-primary me-2" th:text="${doc.docId}">P101</span>
+                        <span th:text="${doc.title}">Document Title</span>
+                    </h4>
+                    <div>
+                        <span class="badge bg-secondary me-2" th:text="'App Code: ' + ${doc.appCode}">SDM</span>
+                        <span class="badge bg-dark border border-secondary" th:text="'v' + ${doc.versionNum}">1.0.0</span>
+                    </div>
+                </div>
+                <p class="text-slate-300" th:text="${doc.description}">Document description...</p>
+
+                <div class="d-flex justify-content-between align-items-center border-top border-secondary pt-3 mt-3">
+                    <div>
+                        <span class="text-muted fs-7 me-3">Status: </span>
+                        <span th:if="${doc.status == 'APPROVED'}" class="badge bg-success">APPROVED</span>
+                        <span th:if="${doc.status == 'PENDING_APPROVAL'}" class="badge bg-warning text-dark">PENDING APPROVAL</span>
+                        <span th:if="${doc.status == 'PENDING_MAKER'}" class="badge bg-info text-dark">DRAFT / MAKER</span>
+                        <span th:if="${doc.status == 'REJECTED'}" class="badge bg-danger">REJECTED</span>
+                    </div>
+                    <a th:href="@{'/document/' + ${doc.docId}}" class="btn btn-outline-primary btn-sm">Open Document Frame</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

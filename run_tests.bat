@@ -1,0 +1,3 @@
+@echo off
+echo Running JUnit Tests for Software Development Document Environment...
+call mvn test
