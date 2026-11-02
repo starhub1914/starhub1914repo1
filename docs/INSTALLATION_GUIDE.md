@@ -59,7 +59,15 @@ Set active profile in `application.yml` or via command line parameter:
 ---
 
 ### 4. Docker Deployment
-Run full stack (Spring Boot + PostgreSQL + Ollama + Flask RAG):
+From the project root, copy the example environment file and start the full stack (Spring Boot, PostgreSQL, Ollama, and the Flask RAG service):
 ```bash
-docker-compose up -d --build
+cp .env.example .env
+docker compose up -d --build
 ```
+
+Open the application at `http://localhost:8080` (or the `APP_PORT` configured in `.env`). PostgreSQL data and Ollama models are stored in Docker volumes and survive container restarts. To download the default chat model after Ollama starts:
+```bash
+docker compose exec ollama ollama pull llama3.2:latest
+```
+
+Use `docker compose logs -f sdm-app` to view application logs and `docker compose down` to stop the stack. Add `-v` to `down` only when you also want to delete the persisted database and Ollama data. Change the example database password before using the stack outside a local development environment.
